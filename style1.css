@@ -351,7 +351,6 @@ a:hover, a:focus {
 /* Switch button */
 .onoffswitch {
     position: relative; width: 80px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-checkbox {
     display: none;
