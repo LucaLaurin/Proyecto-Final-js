@@ -132,82 +132,76 @@ Weather.prototype.getWeatherIcon = function (wId, sunrise, sunset) {
 
 Weather.prototype.displayWeatherIcon = function (selector, icon) {
   if (selector && typeof icon == "object") {
-        if (icon.name != "na") {
-            $(selector).addClass(icon.name);
-            animate(selector, icon.animation, 2000, 0, "linear", "infinite");
-        }
+    if (icon.name != "na") {  
+      $(selector).addClass(icon.name);  
+      animate(selector, icon.animation, 2000, 0, "linear", "infinite");
     }
+  }
 };
 
 Weather.prototype.currentWeather = function () {
   //Obtener datos del clima de  openweather API, formato y mostrar.
   if (this.location) {
-        function setMain(res) {
-            if (res.main) {
-                $("#temperature").text(Math.round(res.main.temp) + "°");
-                $("#description").text(res.weather[0].description);
-
-                if (res.main.humidity) {
-                    $("#humidity").text(res.main.humidity);
-                } else {
-                    $("#humidity").text("0");
-                }
-            }
+    function setMain(res) {
+      if (res.main) {
+        $("#temperature").text(Math.round(res.main.temp) + "°");
+        $("#description").text(res.weather[0].description);
+        if (res.main.humidity) {
+          $("#humidity").text(res.main.humidity);
+        } else {
+          $("#humidity").text("0");
         }
-
-        $.getJSON("https://api.openweathermap.org/data/2.5/weather", {
-            q: this.location,
-            units: "metric",
-            appid: "bc1301b0b23fe6ef52032a7e5bb70820"
-        }, function (json) {
-            var wId = json.weather[0].id;
-
-           if (wId) {
-               var icon = this.getWeatherIcon(wId, json.sys.sunrise, json.sys.sunset);
-               this.displayWeatherIcon("#wicon-main", icon);
-            }
-
-            setMain(json);
-        }.bind(this));
+      }
     }
+
+    $.getJSON("https://api.openweathermap.org/data/2.5/weather", {
+      q: this.location,
+      units: "metric",
+      appid: "bc1301b0b23fe6ef52032a7e5bb70820"
+    }, function (json) {
+      var wId = json.weather[0].id;
+      if (wId) {       
+        var icon = this.getWeatherIcon(wId, json.sys.sunrise, json.sys.sunset);
+        this.displayWeatherIcon("#wicon-main", icon);
+      }
+      setMain(json);
+    }.bind(this));
+  }
 }; 
 
 Weather.prototype.forecast = function () {
   function setForecast(res) {
-        this.daily = [];
-        var list = res.list;
-
-        for (var i = 0, len = list.length; i < len; i++) {
-            this.daily[i] = this.daily[i] ? this.daily[i] : {};
-            this.daily[i].maxTemp = Math.round(list[i].temp.max);
-            this.daily[i].minTemp = Math.round(list[i].temp.min);
-            this.daily[i].day = new Date(list[i].dt * 1000).getDay();
-            var iconId = list[i].weather[0].id;
-            this.daily[i].icon = this.getWeatherIcon(iconId);
-        }
+    this.daily = [];
+    var list = res.list;
+    for (var i = 0, len = list.length; i < len; i++) {
+      this.daily[i] = this.daily[i] ? this.daily[i] : {};
+      this.daily[i].maxTemp = Math.round(list[i].temp.max);
+      this.daily[i].minTemp = Math.round(list[i].temp.min);
+      this.daily[i].day = new Date(list[i].dt * 1000).getDay();
+      var iconId = list[i].weather[0].id;
+      this.daily[i].icon = this.getWeatherIcon(iconId);
     }
-
+  }
   function displayForecast() {
-        var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-        _this = this;
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    _this = this;
+    $(".days-box").children(".col-xs-3").each(function (index) {
+      $(this).children('.day').text(days[_this.daily[index].day]);
+      $(this).find('.d-min-temp').text(_this.daily[index].minTemp + "°");
+      $(this).find('.d-max-temp').text(_this.daily[index].maxTemp + "°");
+      $(this).find('.wi').addClass(_this.daily[index].icon.name);
+    });
+  }
 
-        $(".days-box").children(".col-xs-3").each(function (index) {
-            $(this).children('.day').text(days[_this.daily[index].day]);
-            $(this).find('.d-min-temp').text(_this.daily[index].minTemp + "°");
-            $(this).find('.d-max-temp').text(_this.daily[index].maxTemp + "°");
-            $(this).find('.wi').addClass(_this.daily[index].icon.name);
-        });
-    }
-
-   $.getJSON("https://api.openweathermap.org/data/2.5/forecast/daily", {
-        q: this.location,
-        cnt: 4,
-        units: "metric",
-        appid: "bc1301b0b23fe6ef52032a7e5bb70820"
-    }, function (json) {
-        setForecast.call(this, json);
-        displayForecast.call(this);
-    }.bind(this));
+  $.getJSON("https://api.openweathermap.org/data/2.5/forecast/daily", {
+    q: this.location,
+    cnt: 4,
+    units: "metric",
+    appid: "bc1301b0b23fe6ef52032a7e5bb70820"
+  }, function (json) {
+    setForecast.call(this, json);
+    displayForecast.call(this);
+  }.bind(this));
 };
 
 Weather.prototype.setUnit = function () {
