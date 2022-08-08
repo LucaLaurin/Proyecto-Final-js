@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/LucaLaurin/Proyecto-Final-js/issues"
   },
-  "homepage": "https://github.com/LucaLaurin/Proyecto-Final-js#readme"
+  "homepage": "https://github.com/LucaLaurin/Proyecto-Final-js#readme",
+  "devDependencies": {}
 }
