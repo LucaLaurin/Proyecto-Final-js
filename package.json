@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "express": "^4.18.1",
+    "jquery": "^3.6.0"
+  },
+  "name": "proyecto-final",
+  "description": "",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucaLaurin/Proyecto-Final-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucaLaurin/Proyecto-Final-js/issues"
+  },
+  "homepage": "https://github.com/LucaLaurin/Proyecto-Final-js#readme"
+}
