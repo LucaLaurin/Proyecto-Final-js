@@ -7,7 +7,7 @@ const apiKey = "abf3cf138cff1b007caf63c790896dcf";
 form.addEventListener("submit", e => {
   e.preventDefault();
   let inputVal = input.value;
-
+    /* De esta manera no se puede ingresar la misma ciudad */
   const listItems = list.querySelectorAll(".ajax-section .city");
   const listItemsArray = Array.from(listItems);
 
@@ -28,6 +28,15 @@ form.addEventListener("submit", e => {
       }
       return content == inputVal.toLowerCase();
     });
+
+    if (filteredArray.length > 0) {
+      msg.textContent = `Estas ingresando nuevamente  ${
+        filteredArray[0].querySelector(".city-name span").textContent
+      } ...de otra manera podes iongresar el codigo postal para ser mas especifico 😉`;
+      form.reset();
+      input.focus();
+      return;
+    }
   }
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=metric`;
 
